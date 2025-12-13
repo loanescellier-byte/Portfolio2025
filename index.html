@@ -8,12 +8,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Roxborough+CF:wght@600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
+
+   
+
+    /* Définition des couleurs principales en variables CSS */
+
     :root{
       --bordeaux: #561C24;
       --bordeaux2: #6D2932;
       --beige: #C7B7A3;
       --ivory: #E8D8C4;
+      --black-film: #111111; /* Couleur de la pellicule */
+      --film-number-orange: #FF7F50; /* Couleur orange pour les numéros */
+      /* Nouvelle variable pour la largeur de la pellicule (définie par JS) */
+      --full-scroll-width: 0px; 
     }
+
+    /* Style général de la page */
 
     body{
       background: var(--ivory);
@@ -21,13 +32,19 @@
       font-family: 'Poppins', sans-serif;
     }
 
+    /* Titres avec une autre police */
+
     h1, h2, h3, h4, h5, h6{
-      font-family: 'Roxborough CF', serif;
+      font-family: 'Roxborough CF', serif, italic;
     }
+
+    /* Style de la barre de navigation */
 
     .navbar-custom{ background: var(--bordeaux); }
     .nav-link{ color: var(--ivory)!important; font-weight: 500; }
     .nav-link:hover{ color: var(--beige)!important; }
+
+    /* Logo dans la navbar */
 
     .navbar-brand img{
       height: 100px;
@@ -35,15 +52,29 @@
       border-radius: 100%;
     }
 
-    .hero{
-      background: linear-gradient(180deg,var(--bordeaux),var(--bordeaux2));
-      color: var(--ivory);
-      text-align:center;
-      padding:6rem 1rem;
+    /* ==== Section Hero avec Image Responsive ==== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 60vh; 
+      min-height: 300px;
+      overflow: hidden; 
+      background: var(--bordeaux); 
+      padding: 0; 
+      line-height: 0; 
     }
 
-    .hero h1{ font-size:3rem; }
-    .hero p{ opacity:.9; }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+      object-position: center; 
+      display: block;
+    }
+
+
+    /* Conteneur appareil photo */
+
 
     .camera-container {
       position: relative;
@@ -64,6 +95,9 @@
     }
     .slideshow { display: flex; width: 100%; height: 100%; animation: slide 20s infinite linear; }
     .slideshow img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
+    
+    /* Animation du slideshow */
+
 
     @keyframes slide {
       0%   { transform: translateX(0); }
@@ -75,12 +109,49 @@
     }
 
     section{ padding:4rem 0; }
+    
+    /* ==== FLÈCHE CURSEUR CÔTE À CÔTE ==== */
+    .cv-action-container {
+        display: flex; /* Permet au bouton et à l'icône d'être sur la même ligne */
+        align-items: center; /* Centre verticalement les éléments */
+        gap: 10px; /* Espace entre le bouton et l'icône */
+        margin-top: 20px; /* Ajout d'espace au-dessus du groupe */
+    }
+
+    .cv-pointer-icon {
+        color: var(--bordeaux);
+        font-size: 1.8rem; /* Taille de la flèche */
+        transform: rotate(-10deg); /* Inclinaison LÉGÈRE vers la gauche */
+        animation: clickSimulation 1s infinite alternate ease-in-out; 
+        cursor: pointer; 
+        transition: transform 0.3s ease-in-out; /* Pour une transition douce */
+    }
+
+    @keyframes clickSimulation {
+        0% {
+            transform: translate(0, 0) rotate(-10deg); /* Position de départ inclinée à gauche */
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-3px, 3px) rotate(-15deg) scale(0.95); /* Déplacement et rotation/réduction simulant un clic */
+            opacity: 0.8; 
+        }
+    }
+    
+    /* EFFET AU SURVOL : Assombrir le bouton lorsque le conteneur est survolé */
+    .cv-action-container:hover a.btn {
+        filter: brightness(0.8); /* Assombrit le bouton */
+        transition: filter 0.3s ease;
+    }
+
 
     /* ==== COMPÉTENCES ==== */
     #skills {
       background: #fff;
       position: relative;
       overflow: hidden;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
     }
 
     .skills-track {
@@ -89,19 +160,54 @@
       gap: 4rem;
       animation: scrollLoop 25s linear infinite;
       width: max-content;
+      margin: 20px 0; 
     }
 
     #skills img {
       height: 70px;
-      transition: transform 0.3s ease, filter 0.3s ease;
+      transition: filter 0.3s ease;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
 
     #skills img:hover {
-      transform: scale(1.2);
       filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
     }
 
+    /* Conteneur de compétence pour l'indicateur de niveau */
+    .skill-item {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+      padding: 15px 0; 
+    }
+    .skill-item:hover {
+        transform: scale(1.2);
+    }
+
+    /* Indicateur de niveau au survol */
+    .skill-badge {
+      position: absolute;
+      bottom: 0px; 
+      left: 50%;
+      transform: translateX(-50%) translateY(5px);
+      background: var(--bordeaux);
+      color: var(--ivory);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+      z-index: 3;
+    }
+    .skill-item:hover .skill-badge {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0); 
+    }
+    
     @keyframes scrollLoop {
       from { transform: translateX(0); }
       to { transform: translateX(-50%); }
@@ -129,22 +235,153 @@
       background: linear-gradient(to left, #fff 40%, transparent);
     }
 
-    .project-card{
-      border:none;
-      border-radius:15px;
-      overflow:hidden;
-      box-shadow:0 8px 20px rgba(0,0,0,0.1);
-      transition:transform .3s;
-      cursor: pointer;
-    }
-    .project-card:hover{ transform:translateY(-8px); }
+    /* ==== PROJETS (MODIFICATIONS DE HAUTEUR ICI) ==== */
 
+    #projects {
+        background: var(--bordeaux); 
+        color: var(--bordeaux); 
+    }
+    #projects h2 {
+        color: var(--ivory); 
+    }
+
+    /* 1. Le conteneur qui est la bande noire épaisse et défilante */
+    .film-strip-wrapper {
+        background: var(--black-film);
+        padding: 25px 0; 
+        position: relative;
+        display: flex; 
+        overflow-x: auto; /* Permet le défilement horizontal */
+        gap: 20px; 
+        border-top: 1px solid #333;
+        border-bottom: 1px solid #333;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        padding-left: 20px; 
+        padding-right: 20px; 
+    }
+    
+    /* Masquer la barre de défilement native (pour un look plus propre) */
+    .film-strip-wrapper::-webkit-scrollbar { display: none; }
+    .film-strip-wrapper { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* 2. Le cadre individuel (le blanc de la pellicule) */
+    .project-frame {
+        flex-shrink: 0; 
+        width: 320px; 
+        position: relative;
+        margin-top: -5px; 
+        margin-bottom: -5px; 
+        transition: transform .3s ease;
+    }
+
+    .project-frame:hover {
+        transform: translateY(-5px); 
+    }
+
+    /* 3. La carte du projet à l'intérieur du cadre */
+    .project-card {
+        background: white;
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        cursor: pointer;
+        position: relative; 
+        
+        /* FIX: Assurer une hauteur uniforme et un alignement vertical */
+        height: 440px; /* Hauteur fixe pour alignement parfait */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Styles d'image */
     .project-card img{
       width: 100%;
       height: 250px;
       object-fit: cover;
+      transition: filter 0.4s ease;
+    }
+    
+    .project-card:hover img{ 
+      filter: brightness(0.7) blur(1px); 
     }
 
+    /* Texte au survol de la carte (Overlay) */
+    .project-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(86, 28, 36, 0.4); 
+      color: var(--ivory);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 10px; 
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: 'Roxborough CF', serif;
+      z-index: 12;
+    }
+    .project-card:hover .project-overlay { 
+      opacity: 1;
+    }
+
+
+    /* 4. Numéros de cadre en ORANGE sur la bande noire */
+    .project-frame .frame-number {
+        position: absolute;
+        top: 5px; 
+        left: 10px;
+        color: var(--film-number-orange);
+        font-size: 0.8rem;
+        font-family: monospace; 
+        font-weight: bold;
+        z-index: 11;
+        opacity: 0.9;
+    }
+    
+    /* Zone de description */
+    .project-card .p-3 {
+        flex-grow: 1; /* Permet au contenu de remplir l'espace restant */
+        /* Gère le cas où le texte est trop long */
+        overflow: hidden; 
+        position: relative;
+    }
+
+    /* 5. Perforations (Trous Carrés) - UTILISE LA VARIABLE JS POUR LA LARGEUR EXACTE */
+    .film-strip-wrapper::before,
+    .film-strip-wrapper::after {
+        content: "";
+        position: absolute;
+        left: 0; 
+        width: var(--full-scroll-width); 
+        height: 15px; 
+        background: transparent; 
+        z-index: 10; 
+        
+        /* Modèle de perforation */
+        background-image: 
+            linear-gradient(to right, 
+                white 0, 
+                white 15px, /* Largeur du trou */
+                transparent 15px,
+                transparent 35px); /* Espace entre les trous */
+        background-size: 50px 100%; 
+        background-repeat: repeat-x;
+    }
+
+    /* Positionnement des trous */
+    .film-strip-wrapper::before {
+        top: 0; 
+    }
+    .film-strip-wrapper::after {
+        bottom: 0; 
+    }
+    
      /* ==== CONTACT ==== */
     #contact {
       background: white;
@@ -160,9 +397,9 @@
 
     .contact-icons a {
       text-decoration: none;
-      color: var(--bordeaux);
+      color: var(--ivory);
       font-size: 2.5rem;
-      background: var(--ivory);
+      background: var(--bordeaux);
       border-radius: 50%;
       width: 70px;
       height: 70px;
@@ -174,8 +411,8 @@
     }
 
     .contact-icons a:hover {
-      background: var(--bordeaux2);
-      color: var(--ivory);
+      background: var(--ivory);
+      color: var(--bordeaux);
       transform: translateY(-5px);
     }
 
@@ -188,16 +425,11 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="#home">
-        <img src="images/Log.png" alt="Logo personnel">
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top"> <div class="container"><a class="navbar-brand" href="#home"><img src="images/Log.png" alt="Logo personnel">
       </a>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
+      <div class="collapse navbar-collapse" id="mainNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
           <li class="nav-item"><a class="nav-link" href="#skills">Compétences</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects">Projets</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -206,13 +438,9 @@
     </div>
   </nav>
 
-  <!-- Hero -->
   <header id="home" class="hero">
-    <h1>Loane <span style="color:var(--beige);font-weight:700;">Scellier</span></h1>
-    <p class="lead">Étudiante en deuxième année BUT métier du multimédia et de l'internet </p>
+    <img src="images/portfolio3.pdf" alt="Image d'accueil de Portfolio" class="img-fluid">
   </header>
-
-  <!-- À propos -->
   <section id="about" class="bg-white">
     <div class="container">
       <h2 class="text-center mb-5">À propos de moi</h2>
@@ -221,11 +449,11 @@
           <div class="camera-container mx-auto">
             <div class="screen">
               <div class="slideshow">
-                <img src="images/ima5.jpg" alt="photo 1">
+                <img src="images/img1.jpg" alt="photo 1">
                 <img src="images/img2.jpg" alt="photo 2">
                 <img src="images/img3.jpg" alt="photo 3">
                 <img src="images/img4.JPG" alt="photo 4">
-                <img src="images/img6.JPG" alt="photo 5">
+                <img src="images/ima5.jpg" alt="photo 5">
               </div>
             </div>
             <img src="images/camera.png" alt="camera" class="camera">
@@ -234,141 +462,214 @@
 
         <div class="col-lg-6">
           <p class="fs-5 mb-4" style="text-align: justify;">
-            Je suis actuellement en parcours <strong>Création Numérique</strong> j’aime raconter des histoires à travers l’image, le son et le design. Mon univers mêle graphisme, audiovisuel et communication pour créer des projets qui captent l’attention et éveillent la curiosité.
+            Je suis actuellement en deuxième année du BUT Métiers du Multimédia et de l'internet en parcours <strong>Création Numérique</strong>. J’aime raconter des histoires à travers l’image, le son et le design. Mon univers mêle graphisme, audiovisuel et communication pour créer des projets qui captent l’attention et éveillent la curiosité.
             En dehors de mes projets, j’adore voyager et capturer mes expériences en photo, une manière pour moi de garder une trace des moments vécus et de les transformer ensuite en inspiration créative.
           </p>
-          <a href="images/monCV.pdf" target="_blank" class="btn btn-lg" style="background:var(--bordeaux);color:var(--ivory);">
-            Mon CV !
-          </a>
+
+          <div class="cv-action-container">
+            <a href="images/cvMMI.pdf" target="_blank" class="btn btn-lg" style="background:var(--bordeaux);color:var(--ivory);">
+              Mon CV !
+            </a>
+            <i class="fa-solid fa-arrow-pointer cv-pointer-icon" title="Cliquez ici pour mon CV !"></i>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION COMPÉTENCES MODERNE -->
-  <section id="skills" class="text-center py-5">
+  <section id="skills" class="text-center">
     <div class="container">
       <h2 class="mb-5">Mes Compétences</h2>
       <div class="skills-wrapper">
         <div class="skills-gradient-left"></div>
+
         <div class="skills-track">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
-          <!-- duplication pour boucle continue -->
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
+            <span class="skill-badge">Avancé</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+            <span class="skill-badge">Débutant</span>
+          </div>
+
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
+            <span class="skill-badge">Avancé</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
+            <span class="skill-badge">Intermédiaire</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
+            <span class="skill-badge">Débutant</span>
+          </div>
+          <div class="skill-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+            <span class="skill-badge">Débutant</span>
+          </div>
         </div>
         <div class="skills-gradient-right"></div>
       </div>
     </div>
   </section>
 
-  <!-- Projets -->
   <section id="projects">
     <div class="container">
       <h2 class="text-center mb-5">Mes Projets</h2>
-      <div class="row g-4">
+      
+      <div class="film-strip-wrapper">
 
-        <div class="col-md-4">
+        <div class="project-frame">
+          <span class="frame-number">01</span>
           <a href="https://youtu.be/EZZM97t1kFs" class="text-decoration-none text-reset">
             <div class="project-card">
               <img src="images/seconde-chance.png" alt="Seconde chance">
+              <div class="project-overlay">Voir le court-métrage</div>
               <div class="p-3">
                 <h5>Seconde Chance</h5>
-                <p>Court-métrage réalisé dans le cadre des Deauville Green Awards 2025, sur le thème "Filme ton action".
-Le film a remporté la 1ʳᵉ place dans la catégorie Jeune. 
-J’ai participé à la création du scénario et j’ai également interprété un rôle d’actrice.</p>
+                <p>Court-métrage réalisé dans le cadre des Deauville Green Awards 2025, sur le thème “Filme ton action”, ayant remporté la première place dans la catégorie Jeunes.</p>
               </div>
             </div>
           </a>
         </div>
 
-        <div class="col-md-4">
-          <a href="Projets/CasqueF1.pdf" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/casque.png" alt="Casque F1 en 3D">
-              <div class="p-3">
-                <h5>Casque F1 en 3D</h5>
-                <p>Ma première création 3D sur Blender, qui m’a permis de découvrir et de maîtriser les outils de modélisation et de rendu.
-  Un projet formateur qui marque le début de mon apprentissage sur Blender.</p>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <div class="col-md-4">
-          <a href="Projets/OverTime.pdf" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/Overtime.png" alt="Over Time">
-              <div class="p-3">
-                <h5>Over Time</h5>
-                <p>Projet collectif réalisé en première année d’études.
-Nous devions imaginer un événement immersif valorisant le patrimoine industriel d’Elbeuf et concevoir toute la communication autour (identité visuelle, supports, concept, etc.).</p>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <div class="col-md-4">
+        <div class="project-frame">
+          <span class="frame-number">02</span>
           <a href="Projets/illustration.pdf" class="text-decoration-none text-reset">
             <div class="project-card">
               <img src="images/illustration.png" alt="Illustration écologique">
+              <div class="project-overlay">Voir l'illustration </div>
               <div class="p-3">
                 <h5>Illustration</h5>
-                <p>Illustration réalisée sur Adobe Illustrator dans un temps imparti.
-Le sujet : exprimer l’absurdité d’un monde ignorant les enjeux du réchauffement climatique et de la perte de biodiversité.</p>
+                <p>Illustration réalisée sur Adobe Illustrator dans un temps contraint, dénonçant l’absurdité des réactions face au réchauffement climatique.</p>
               </div>
             </div>
           </a>
         </div>
 
-        <div class="col-md-4">
-          <a href="https://youtu.be/y_cIjDUvfk8" class="text-decoration-none text-reset">
+        <div class="project-frame">
+          <span class="frame-number">03</span>
+          <a href="https://youtu.be/IkQDu1N6STk" class="text-decoration-none text-reset">
             <div class="project-card">
-              <img src="images/Interview.png" alt="Interview Maison Sport Santé">
+              <img src="images/ca.png" alt="Interview Maison Sport Santé">
+              <div class="project-overlay">Voir la vidéo</div>
               <div class="p-3">
-                <h5>Interview Maison Sport Santé</h5>
-                <p>Montage vidéo réalisé à partir d’une interview sur la Maison Sport Santé.
-J’ai assuré le montage complet en seulement 3 heures, en optimisant le rythme et la cohérence du récit.</p>
+                <h5>Crédit Agricole : le sociétariat</h5>
+                <p>Vidéo pour le Crédit Agricole expliquant le sociétariat aux jeunes, en utilisant les codes des créateurs YouTube : rythme dynamique, ton direct et mise en scène moderne.</p>
               </div>
             </div>
           </a>
         </div>
 
-        <div class="col-md-4">
+       
+
+        <div class="project-frame">
+          <span class="frame-number">04</span>
+          <a href="Projets/CasqueF1.pdf" class="text-decoration-none text-reset">
+            <div class="project-card">
+              <img src="images/casque.png" alt="Casque F1 en 3D">
+              <div class="project-overlay">Voir le rendu</div>
+              <div class="p-3">
+                <h5>Casque F1 en 3D</h5>
+                <p>Première expérience de création 3D sur Blender, axée sur la découverte et l’appropriation des techniques de modélisation et de rendu.</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        
+
+        <div class="project-frame">
+          <span class="frame-number">05</span>
           <a href="https://youtu.be/bh0O1uTY05I" class="text-decoration-none text-reset">
             <div class="project-card">
               <img src="images/filmnoir.png" alt="Film Noir">
+              <div class="project-overlay">Voir le court-métrage</div>
               <div class="p-3">
                 <h5>Film Noir</h5>
-                <p>Projet de court-métrage de type film noir, réalisé dans un cadre scolaire, basé sur un scénario donné. J’ai pris en charge la captation vidéo, la gestion du son et le montage final.</p>
+                <p>Projet de court-métrage de type film noir, pour lequel j’ai assuré la captation vidéo, la prise et la gestion du son, ainsi que le montage final.</p>
               </div>
             </div>
           </a>
         </div>
 
+        <div class="project-frame">
+          <span class="frame-number">06</span>
+          <a href="Projets/OverTime.pdf" class="text-decoration-none text-reset">
+            <div class="project-card">
+              <img src="images/OverTime.png" alt="Over Time">
+              <div class="project-overlay">Voir le projet</div>
+              <div class="p-3">
+                <h5>Over Time</h5>
+                <p>Projet collectif réalisé en première année d’études pour imaginer un événement immersif valorisant le patrimoine industriel d’Elbeuf.</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        
       </div>
-    </div>
+      </div>
   </section>
 
-<!-- CONTACT AVEC ICONES -->
-  <section id="contact">
+<section id="contact">
     <div class="container">
       <h2 class="mb-3">Contact</h2>
       <p>N’hésitez pas à me contacter : </p>
@@ -383,10 +684,29 @@ J’ai assuré le montage complet en seulement 3 heures, en optimisant le rythme
   <footer>
     <p>&copy; <span id="year"></span> Scellier Loane — Tous droits réservés</p>
   </footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+
+
     document.getElementById('year').textContent = new Date().getFullYear();
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const filmStrip = document.querySelector('.film-strip-wrapper');
+
+        // === 1. Calcul et ajustement de la longueur des perforations (pellicule) ===
+        if (filmStrip) {
+            // Un petit délai pour s'assurer que le contenu a bien été rendu
+            // Ceci est crucial pour que scrollWidth renvoie la bonne taille.
+            setTimeout(() => {
+                // Calcule la largeur totale du contenu défilant (scrollWidth)
+                const fullContentWidth = filmStrip.scrollWidth + 'px';
+                
+                // Applique cette largeur à la variable CSS --full-scroll-width
+                filmStrip.style.setProperty('--full-scroll-width', fullContentWidth);
+            }, 50); 
+        }
+    });
   </script>
 </body>
 </html>
