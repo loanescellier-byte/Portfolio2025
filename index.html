@@ -3,87 +3,339 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Portfolio - Loane Scellier</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roxborough+CF:wght@600;700&display=swap" rel="stylesheet">
+  <title>Loane Scellier — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+ 
   <style>
-
-   
-
-    /* Définition des couleurs principales en variables CSS */
-
-    :root{
-      --bordeaux: #561C24;
-      --bordeaux2: #6D2932;
-      --beige: #C7B7A3;
-      --ivory: #E8D8C4;
-      --black-film: #111111; /* Couleur de la pellicule */
-      --film-number-orange: #FF7F50; /* Couleur orange pour les numéros */
-      /* Nouvelle variable pour la largeur de la pellicule (définie par JS) */
-      --full-scroll-width: 0px; 
+    :root {
+      --rose:    #F2C4CE;
+      --rose2:   #E8A5B5;
+      --beige:   #EDE0D4;
+      --beige2:  #D9C7B5;
+      --marron:  #7B5B47;
+      --marron2: #5C3D2E;
+      --creme:   #FAF6F1;
+      --txt:     #3A2A20;
     }
-
-    /* Style général de la page */
-
-    body{
-      background: var(--ivory);
-      color: var(--bordeaux);
-      font-family: 'Poppins', sans-serif;
+ 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      background: var(--creme);
+      color: var(--txt);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
     }
-
-    /* Titres avec une autre police */
-
-    h1, h2, h3, h4, h5, h6{
-      font-family: 'Roxborough CF', serif, italic;
+ 
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--marron);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.3s;
+      transform: translate(-50%, -50%);
     }
-
-    /* Style de la barre de navigation */
-
-    .navbar-custom{ background: var(--bordeaux); }
-    .nav-link{ color: var(--ivory)!important; font-weight: 500; }
-    .nav-link:hover{ color: var(--beige)!important; }
-
-    /* Logo dans la navbar */
-
-    .navbar-brand img{
-      height: 100px;
-      width: auto;
-      border-radius: 100%;
+    .cursor.big { transform: translate(-50%, -50%) scale(3.5); background: var(--rose); opacity: 0.5; }
+ 
+    /* ── ASTERISK MENU ── */
+    .menu-toggle {
+      position: fixed;
+      bottom: 2.5rem; right: 2.5rem;
+      z-index: 1000;
+      width: 60px; height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: none;
     }
-
-    /* ==== Section Hero avec Image Responsive ==== */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 60vh; 
-      min-height: 300px;
-      overflow: hidden; 
-      background: var(--bordeaux); 
-      padding: 0; 
-      line-height: 0; 
-    }
-
-    .hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; 
-      object-position: center; 
+    .asterisk {
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--marron);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      transition: transform 0.6s cubic-bezier(.23,1,.32,1), color 0.3s;
       display: block;
+      user-select: none;
     }
-
-
-    /* Conteneur appareil photo */
-
-
-    .camera-container {
+    .menu-toggle:hover .asterisk { color: var(--rose2); }
+    .menu-toggle.open .asterisk { transform: rotate(30deg); color: var(--rose2); }
+ 
+    /* NAV OVERLAY */
+    .nav-overlay {
+      position: fixed; inset: 0;
+      background: var(--marron2);
+      z-index: 900;
+      display: flex; align-items: center; justify-content: center;
+      clip-path: circle(0% at 95% 95%);
+      transition: clip-path 0.7s cubic-bezier(.77,0,.175,1);
+      pointer-events: none;
+    }
+    .nav-overlay.open { clip-path: circle(150% at 95% 95%); pointer-events: all; }
+    .nav-links { list-style: none; text-align: center; }
+    .nav-links li { overflow: hidden; margin: 0.5rem 0; }
+    .nav-links a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-style: italic; font-weight: 300;
+      color: var(--beige); text-decoration: none;
+      letter-spacing: -0.02em; display: block;
+      transition: color 0.3s, transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--rose); transform: translateX(10px); }
+    .nav-label {
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--rose2); font-family: 'DM Sans', sans-serif;
+      display: block; margin-top: -0.5rem;
+    }
+ 
+    /* ───────── HERO NEW ───────── */
+    #hero {
+      min-height:90vh;
+      background: var(--creme);
       position: relative;
-      width: 600px;
-      max-width: 100%;
-      margin: 0 auto;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 4rem;
+      padding-left: 15%;
     }
-    .camera { width: 100%; position: relative; z-index: 2; }
-    .screen {
+    .hero-main {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+    }
+    .hero-topline {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--marron);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 12vw, 10rem);
+      line-height: 0.9;
+      font-weight: 400;
+      color: var(--marron2);
+      letter-spacing: -0.05em;
+    }
+    .hero-title span {
+      color: var(--rose2);
+      font-style: italic;
+    }
+    .hero-description {
+      margin-top: 2rem;
+      max-width: 500px;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--txt);
+    }
+    .hero-btn {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 1rem 2rem;
+      background: var(--marron2);
+      color: var(--creme);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-size: 0.7rem;
+      transition: 0.3s ease;
+    }
+    .hero-btn:hover {
+      background: var(--rose2);
+      transform: translateY(-3px);
+    }
+    .hero-image-wrap {
+      position: absolute;
+      right: 15%;
+      top: 50%;
+      transform: translateY(-50%) rotate(6deg);
+      width: clamp(220px, 26vw, 340px);
+      z-index: 2;
+      transition: transform 0.5s ease;
+    }
+    .hero-image-wrap:hover {
+      transform: translateY(-50%) rotate(-3deg) scale(1.03);
+    }
+    .hero-image {
+      width: 100%;
+      display: block;
+      border: 12px solid white;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    }
+    .hero-bg-word {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20vw;
+      font-weight: 700;
+      color: rgba(123,91,71,0.04);
+      letter-spacing: -0.05em;
+      z-index: 1;
+      user-select: none;
+    }
+    .hero-floating-note {
+      position: absolute;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--marron);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      z-index: 4;
+    }
+    .note-1 { top: 18%; left: 10%; }
+    .note-2 { bottom: 20%; left: 15%; }
+    .note-3 { top: 25%; right: 18%; }
+    .hero-side-text {
+      position: absolute;
+      left: -40px;
+      top: 50%;
+      transform: rotate(-90deg);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      font-size: 0.6rem;
+      color: var(--marron);
+    }
+    @keyframes fadeup {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+    /* ── PAPER NOTE (À propos) ── */
+    .paper-note-wrap {
+      position: relative;
+      display: inline-block;
+      transform: rotate(0deg);
+      transition: transform 0.5s ease;
+      filter: drop-shadow(0 8px 24px rgba(91,61,46,0.18));
+    }
+    .paper-note-wrap:hover { transform: rotate(2deg) scale(1.01); }
+    .paper-note {
+      background: #f5f0e8;
+      padding: 2.5rem 2.5rem 2rem 3.2rem;
+      position: relative;
+      background-image: repeating-linear-gradient(
+        transparent,
+        transparent 27px,
+        #b8c4d0 27px,
+        #b8c4d0 28px
+      );
+      background-size: 100% 28px;
+      background-position: 0 36px;
+      border-radius: 2px;
+    }
+    .paper-note::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 60%);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    .paper-holes {
+      position: absolute;
+      left: 16px;
+      top: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      pointer-events: none;
+    }
+    .paper-hole {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--creme);
+      border: 1px solid #c8bfb0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .paper-note p {
+      font-size: 0.92rem;
+      line-height: 28px;
+      color: var(--txt);
+      font-weight: 300;
+      margin-bottom: 0;
+    }
+    .paper-note p + p { margin-top: 0; }
+    .paper-note strong { font-weight: 500; color: var(--rose2); }
+
+    /* ── SECTION RULES ── */
+    section { padding: 3.5rem 0; }
+    .section-label {
+      font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--marron); display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .section-label::before { content: '✳'; font-size: 0.9rem; }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300; line-height: 1;
+      letter-spacing: -0.02em; color: var(--marron2);
+    }
+    .section-title em { font-style: italic; color: var(--rose2); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+ 
+    /* ── ABOUT ── */
+    #about { background: var(--creme); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; align-items: center; margin-top: 0.25rem;
+    }
+    .about-divider { display: none; }
+    .about-text { font-size: 1rem; line-height: 1.7; color: var(--txt); font-weight: 300; }
+    .about-text p + p { margin-top: 1rem; }
+    .about-pull {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-style: italic; line-height: 1.4;
+      color: var(--marron); padding-top: 1.5rem;
+    }
+
+    @keyframes cameraSlide {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Appareil photo dans la section À propos */
+    .about-camera {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .about-camera-wrapper {
+      width: min(700px, 100%);
+      position: relative;
+      transform: rotate(-3deg);
+      transition: transform 0.5s ease;
+    }
+    .about-camera-wrapper:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
+    .about-camera-img {
+      width: 100%;
+      display: block;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 24px 48px rgba(91,61,46,0.22));
+      transition: filter 0.5s ease;
+    }
+    .about-camera-screen {
       position: absolute;
       top: 28%;
       left: 10%;
@@ -93,620 +345,671 @@
       border-radius: 6px;
       z-index: 1;
     }
-    .slideshow { display: flex; width: 100%; height: 100%; animation: slide 20s infinite linear; }
-    .slideshow img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
-    
-    /* Animation du slideshow */
-
-
-    @keyframes slide {
-      0%   { transform: translateX(0); }
-      20%  { transform: translateX(-100%); }
-      40%  { transform: translateX(-200%); }
-      60%  { transform: translateX(-300%); }
-      80%  { transform: translateX(-400%); }
-      100% { transform: translateX(0); }
-    }
-
-    section{ padding:4rem 0; }
-    
-    /* ==== FLÈCHE CURSEUR CÔTE À CÔTE ==== */
-    .cv-action-container {
-        display: flex; /* Permet au bouton et à l'icône d'être sur la même ligne */
-        align-items: center; /* Centre verticalement les éléments */
-        gap: 10px; /* Espace entre le bouton et l'icône */
-        margin-top: 20px; /* Ajout d'espace au-dessus du groupe */
-    }
-
-    .cv-pointer-icon {
-        color: var(--bordeaux);
-        font-size: 1.8rem; /* Taille de la flèche */
-        transform: rotate(-10deg); /* Inclinaison LÉGÈRE vers la gauche */
-        animation: clickSimulation 1s infinite alternate ease-in-out; 
-        cursor: pointer; 
-        transition: transform 0.3s ease-in-out; /* Pour une transition douce */
-    }
-
-    @keyframes clickSimulation {
-        0% {
-            transform: translate(0, 0) rotate(-10deg); /* Position de départ inclinée à gauche */
-            opacity: 1;
-        }
-        100% {
-            transform: translate(-3px, 3px) rotate(-15deg) scale(0.95); /* Déplacement et rotation/réduction simulant un clic */
-            opacity: 0.8; 
-        }
-    }
-    
-    /* EFFET AU SURVOL : Assombrir le bouton lorsque le conteneur est survolé */
-    .cv-action-container:hover a.btn {
-        filter: brightness(0.8); /* Assombrit le bouton */
-        transition: filter 0.3s ease;
-    }
-
-
-    /* ==== COMPÉTENCES ==== */
-    #skills {
-      background: #fff;
-      position: relative;
-      overflow: hidden;
-      padding-top: 5rem;
-      padding-bottom: 5rem;
-    }
-
-    .skills-track {
+    .about-camera-slideshow {
       display: flex;
-      align-items: center;
-      gap: 4rem;
-      animation: scrollLoop 25s linear infinite;
-      width: max-content;
-      margin: 20px 0; 
-    }
-
-    #skills img {
-      height: 70px;
-      transition: filter 0.3s ease;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-    }
-
-    #skills img:hover {
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
-    }
-
-    /* Conteneur de compétence pour l'indicateur de niveau */
-    .skill-item {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease;
-      padding: 15px 0; 
-    }
-    .skill-item:hover {
-        transform: scale(1.2);
-    }
-
-    /* Indicateur de niveau au survol */
-    .skill-badge {
-      position: absolute;
-      bottom: 0px; 
-      left: 50%;
-      transform: translateX(-50%) translateY(5px);
-      background: var(--bordeaux);
-      color: var(--ivory);
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      white-space: nowrap;
-      z-index: 3;
-    }
-    .skill-item:hover .skill-badge {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0); 
-    }
-    
-    @keyframes scrollLoop {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-
-    .skills-wrapper {
-      display: flex;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .skills-gradient-left, .skills-gradient-right {
-      position: absolute;
-      top: 0;
-      width: 100px;
+      width: calc(100% * 10);
       height: 100%;
-      z-index: 2;
+      animation: cameraSlide 25s linear infinite;
     }
-    .skills-gradient-left {
-      left: 0;
-      background: linear-gradient(to right, #fff 40%, transparent);
-    }
-    .skills-gradient-right {
-      right: 0;
-      background: linear-gradient(to left, #fff 40%, transparent);
-    }
-
-    /* ==== PROJETS (MODIFICATIONS DE HAUTEUR ICI) ==== */
-
-    #projects {
-        background: var(--bordeaux); 
-        color: var(--bordeaux); 
-    }
-    #projects h2 {
-        color: var(--ivory); 
-    }
-
-    /* 1. Le conteneur qui est la bande noire épaisse et défilante */
-    .film-strip-wrapper {
-        background: var(--black-film);
-        padding: 25px 0; 
-        position: relative;
-        display: flex; 
-        overflow-x: auto; /* Permet le défilement horizontal */
-        gap: 20px; 
-        border-top: 1px solid #333;
-        border-bottom: 1px solid #333;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        padding-left: 20px; 
-        padding-right: 20px; 
-    }
-    
-    /* Masquer la barre de défilement native (pour un look plus propre) */
-    .film-strip-wrapper::-webkit-scrollbar { display: none; }
-    .film-strip-wrapper { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* 2. Le cadre individuel (le blanc de la pellicule) */
-    .project-frame {
-        flex-shrink: 0; 
-        width: 320px; 
-        position: relative;
-        margin-top: -5px; 
-        margin-bottom: -5px; 
-        transition: transform .3s ease;
-    }
-
-    .project-frame:hover {
-        transform: translateY(-5px); 
-    }
-
-    /* 3. La carte du projet à l'intérieur du cadre */
-    .project-card {
-        background: white;
-        border: none;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        cursor: pointer;
-        position: relative; 
-        
-        /* FIX: Assurer une hauteur uniforme et un alignement vertical */
-        height: 440px; /* Hauteur fixe pour alignement parfait */
-        display: flex;
-        flex-direction: column;
-    }
-    
-    /* Styles d'image */
-    .project-card img{
-      width: 100%;
-      height: 250px;
+    .about-camera-slideshow img {
+      width: calc(100% / 10);
+      height: 100%;
       object-fit: cover;
-      transition: filter 0.4s ease;
+      flex-shrink: 0;
     }
-    
-    .project-card:hover img{ 
-      filter: brightness(0.7) blur(1px); 
+    .cv-btn {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      margin-top: 2.5rem; padding: 0.85rem 2rem;
+      background: var(--marron2); color: var(--creme);
+      text-decoration: none; font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      border: none; transition: background 0.3s, transform 0.3s; cursor: none;
     }
-
-    /* Texte au survol de la carte (Overlay) */
-    .project-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(86, 28, 36, 0.4); 
-      color: var(--ivory);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      border-radius: 10px; 
-      font-size: 1.5rem;
-      font-weight: 700;
-      font-family: 'Roxborough CF', serif;
-      z-index: 12;
+    .cv-btn:hover { background: var(--rose2); transform: translateY(-2px); }
+    .cv-btn i { font-size: 0.85rem; }
+ 
+    /* ── SKILLS ── */
+    #skills { background: var(--beige); overflow: hidden; }
+    .skills-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 4rem;
     }
-    .project-card:hover .project-overlay { 
-      opacity: 1;
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 1.5rem;
     }
-
-
-    /* 4. Numéros de cadre en ORANGE sur la bande noire */
-    .project-frame .frame-number {
-        position: absolute;
-        top: 5px; 
-        left: 10px;
-        color: var(--film-number-orange);
-        font-size: 0.8rem;
-        font-family: monospace; 
-        font-weight: bold;
-        z-index: 11;
-        opacity: 0.9;
+    .skill-card {
+      background: var(--creme); padding: 1.8rem 1rem;
+      text-align: center; position: relative; overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid var(--beige2);
     }
-    
-    /* Zone de description */
-    .project-card .p-3 {
-        flex-grow: 1; /* Permet au contenu de remplir l'espace restant */
-        /* Gère le cas où le texte est trop long */
-        overflow: hidden; 
-        position: relative;
+    .skill-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--rose2);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
     }
-
-    /* 5. Perforations (Trous Carrés) - UTILISE LA VARIABLE JS POUR LA LARGEUR EXACTE */
-    .film-strip-wrapper::before,
-    .film-strip-wrapper::after {
-        content: "";
-        position: absolute;
-        left: 0; 
-        width: var(--full-scroll-width); 
-        height: 15px; 
-        background: transparent; 
-        z-index: 10; 
-        
-        /* Modèle de perforation */
-        background-image: 
-            linear-gradient(to right, 
-                white 0, 
-                white 15px, /* Largeur du trou */
-                transparent 15px,
-                transparent 35px); /* Espace entre les trous */
-        background-size: 50px 100%; 
-        background-repeat: repeat-x;
+    .skill-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(91,61,46,0.1); }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card img { height: 44px; width: auto; margin-bottom: 0.75rem; }
+    .skill-card-name {
+      font-size: 0.70rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--marron); font-weight: 500;
     }
-
-    /* Positionnement des trous */
-    .film-strip-wrapper::before {
-        top: 0; 
+    .skill-card-level {
+      font-size: 0.9rem; color: var(--marron2); opacity: 0.6;
+      margin-top: 0.25rem; font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
     }
-    .film-strip-wrapper::after {
-        bottom: 0; 
+ 
+    /* Icônes SVG inline pour Canva, CapCut, InDesign, WordPress */
+    .skill-icon-svg {
+      height: 44px; width: 44px; margin: 0 auto 0.75rem; display: block;
     }
-    
-     /* ==== CONTACT ==== */
-    #contact {
-      background: white;
-      text-align: center;
+ 
+    /* ── PROJECTS ── */
+    #projects { background: var(--creme); }
+    .projects-intro {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 4rem; gap: 2rem;
     }
-
-    .contact-icons {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
+    .projects-count {
+      font-family: 'Cormorant Garamond', serif; font-size: 5rem;
+      font-weight: 300; color: var(--beige2); line-height: 1;
     }
-
-    .contact-icons a {
-      text-decoration: none;
-      color: var(--ivory);
-      font-size: 2.5rem;
-      background: var(--bordeaux);
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all .3s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    .projects-list { display: flex; flex-direction: column; gap: 2px; }
+    .project-row {
+      display: grid; grid-template-columns: 60px 1fr 200px 120px;
+      align-items: center; padding: 1.5rem 2rem;
+      background: var(--creme); border: 1px solid var(--beige2);
+      text-decoration: none; color: var(--txt);
+      transition: background 0.3s, transform 0.2s;
+      cursor: none; position: relative; overflow: hidden; flex-wrap: wrap;
     }
-
-    .contact-icons a:hover {
-      background: var(--ivory);
-      color: var(--bordeaux);
-      transform: translateY(-5px);
+    .project-row::after {
+      content: ''; position: absolute; inset: 0; background: var(--rose);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.5s cubic-bezier(.23,1,.32,1); z-index: 0;
     }
-
+    .project-row:hover::after { transform: scaleX(1); }
+    .project-row > * { position: relative; z-index: 1; }
+    .project-row:hover { color: var(--marron2); }
+    .project-num {
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--marron); font-style: italic;
+    }
+    .project-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.7rem;
+      font-weight: 300; letter-spacing: -0.01em;
+    }
+    .project-type {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--marron); opacity: 0.7;
+    }
+    .project-cta {
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      text-align: right; opacity: 0; transition: opacity 0.3s;
+    }
+    .project-row:hover .project-cta { opacity: 1; }
+    .project-desc {
+      grid-column: 2 / -1; font-size: 0.85rem; line-height: 1.7;
+      color: var(--txt); opacity: 0; max-height: 0; overflow: hidden;
+      transition: opacity 0.3s, max-height 0.4s ease;
+      padding-top: 0; font-weight: 300;
+    }
+    .project-row:hover .project-desc { opacity: 0.7; max-height: 80px; padding-top: 0.5rem; }
+ 
+    /* ── CONTACT ── */
+    #contact { background: var(--marron2); color: var(--creme); }
+    #contact .section-label { color: var(--rose); }
+    #contact .section-label::before { color: var(--rose2); }
+    #contact .section-title { color: var(--creme); }
+    #contact .section-title em { color: var(--rose); }
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; margin-top: 4rem;
+    }
+    .contact-big-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      font-weight: 300; font-style: italic;
+      line-height: 1.2; color: var(--beige);
+    }
+    .contact-info { padding-top: 1rem; }
+    .contact-line {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+      text-decoration: none; color: var(--beige2);
+      font-size: 0.85rem; letter-spacing: 0.1em;
+      transition: color 0.3s, gap 0.3s; cursor: none;
+    }
+    .contact-line:hover { color: var(--rose); gap: 1.5rem; }
+    .contact-line i { font-size: 1rem; color: var(--rose2); width: 20px; }
+ 
+    /* ── FOOTER ── */
     footer {
-      background: var(--bordeaux);
-      color: var(--ivory);
-      padding: 2rem 0;
-      text-align: center;
+      background: var(--marron2); border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 2rem; text-align: center;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(237,224,212,0.4);
     }
+ 
+    /* ── HORIZONTAL RULE ── */
+    .mag-rule { width: 100%; height: 1px; background: var(--beige2); margin: 0; }
+ 
+    /* ── RUNNING HEAD ── */
+    .running-head {
+      
+      padding: 0.5rem 1rem;
+  margin-bottom: -90px;
+ background: var(--marron2);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--beige2);
+      
+    }
+ 
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+ 
+    /* ── RESPONSIVE ── */
+
+    /* MOBILE HERO */
+    @media (max-width: 768px) {
+      #hero {
+        padding: 2rem;
+        align-items: flex-start;
+      }
+      .hero-title {
+        font-size: clamp(4rem, 18vw, 6rem);
+        margin-top: 5rem;
+      }
+      .hero-image-wrap {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: rotate(4deg);
+        width: 220px;
+        margin-top: 3rem;
+      }
+      .hero-floating-note { display: none; }
+      .hero-side-text { display: none; }
+
+      /* cursor off on touch */
+      body { cursor: auto; }
+      .cursor { display: none; }
+
+      /* running head simplifié */
+      .running-head span:nth-child(2) { display: none; }
+
+      /* about */
+      .about-grid { grid-template-columns: 1fr; }
+      .about-camera { margin-bottom: 1.5rem; padding: 0.5rem; }
+      .about-camera-wrapper { width: min(260px, 80%); transform: rotate(-2deg); }
+
+      /* skills */
+      .skills-header { flex-direction: column; align-items: flex-start; margin-bottom: 2.5rem; }
+      .skills-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 1rem; }
+      .skill-card { padding: 1.2rem 0.75rem; }
+
+      /* projects */
+      .projects-intro { flex-direction: column; align-items: flex-start; }
+      .project-row { grid-template-columns: 40px 1fr; padding: 1rem; }
+      .project-type, .project-cta { display: none; }
+      .project-desc { grid-column: 2 / -1; }
+
+      /* contact */
+      .contact-layout { grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+      .contact-big-text { font-size: clamp(2.2rem, 8vw, 3.5rem); }
+
+      /* menu toggle */
+      .menu-toggle { bottom: 1.5rem; right: 1.5rem; }
+    }
+
+    /* Tablet : 900px */
+    @media (max-width: 900px) {
+      .about-grid { gap: 1.5rem; }
+      .skills-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+      .project-row { grid-template-columns: 50px 1fr 160px 100px; padding: 1.2rem 1.5rem; }
+      .contact-layout { gap: 3rem; }
+    }
+
+    /* Petit mobile : 480px */
+    @media (max-width: 480px) {
+      .container { padding: 0 1.2rem; }
+      .section-title { font-size: clamp(2rem, 9vw, 3rem); }
+      .skills-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+      .project-name { font-size: 1.3rem; }
+      .contact-line { font-size: 0.78rem; padding: 1.2rem 0; }
+    }
+
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-custom sticky-top"> <div class="container"><a class="navbar-brand" href="#home"><img src="images/Log.png" alt="Logo personnel">
-      </a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse" id="mainNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
-          <li class="nav-item"><a class="nav-link" href="#skills">Compétences</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects">Projets</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-        </ul>
+ 
+  <div class="cursor" id="cursor"></div>
+ 
+  <!-- Asterisk Menu Toggle -->
+  <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+    <span class="asterisk">✳</span>
+  </div>
+ 
+  <!-- Nav Overlay -->
+  <div class="nav-overlay" id="navOverlay">
+    <ul class="nav-links">
+      <li><a href="#hero" onclick="toggleMenu()">Accueil</a><span class="nav-label">01</span></li>
+      <li><a href="#about" onclick="toggleMenu()">À propos</a><span class="nav-label">02</span></li>
+      <li><a href="#skills" onclick="toggleMenu()">Compétences</a><span class="nav-label">03</span></li>
+      <li><a href="#projects" onclick="toggleMenu()">Projets</a><span class="nav-label">04</span></li>
+      <li><a href="#contact" onclick="toggleMenu()">Contact</a><span class="nav-label">05</span></li>
+    </ul>
+  </div>
+ 
+  <!-- Running Head -->
+  <div class="running-head">
+    <span>Loane Scellier — Portfolio</span>
+    <span>Graphisme · Audiovisuel · Communication</span>
+    <span>2026</span>
+  </div>
+ 
+  <!-- ── HERO NEW ── -->
+  <section id="hero">
+    <div class="hero-bg-word">PORTFOLIO</div>
+  
+    <div class="hero-main">
+     
+      <h1 class="hero-title">
+        Loane<br>
+        <span>Scellier</span>
+      </h1>
+      <p class="hero-description">
+        Je transforme des idées en expériences visuelles
+        à travers le graphisme, l'audiovisuel et le design.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="hero-btn">Voir mes projets</a>
       </div>
     </div>
-  </nav>
-
-  <header id="home" class="hero">
-    <img src="images/portfolio3.pdf" alt="Image d'accueil de Portfolio" class="img-fluid">
-  </header>
-  <section id="about" class="bg-white">
+    <div class="hero-image-wrap">
+      <img src="PhotoIndi.JPEG" alt="" class="hero-image">
+    </div>
+  </section>
+ 
+  <!-- ── ABOUT ── -->
+  <section id="about">
     <div class="container">
-      <h2 class="text-center mb-5">À propos de moi</h2>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-lg-6 text-center mb-4 mb-lg-0">
-          <div class="camera-container mx-auto">
-            <div class="screen">
-              <div class="slideshow">
+      <p class="section-label reveal">À propos de moi</p>
+      <h2 class="section-title reveal">Mon<em> Parcours</em></h2>
+      
+ 
+      <div class="about-grid">
+
+        <!-- GAUCHE : appareil photo -->
+        <div class="about-camera reveal">
+          <div class="about-camera-wrapper">
+            <div class="about-camera-screen">
+              <div class="about-camera-slideshow">
                 <img src="images/img1.jpg" alt="photo 1">
                 <img src="images/img2.jpg" alt="photo 2">
                 <img src="images/img3.jpg" alt="photo 3">
                 <img src="images/img4.JPG" alt="photo 4">
-                <img src="images/ima5.JPG" alt="photo 5">
+                <img src="images/ima5.jpg" alt="photo 5">
+                <img src="images/img1.jpg" alt="photo 1">
+                <img src="images/img2.jpg" alt="photo 2">
+                <img src="images/img3.jpg" alt="photo 3">
+                <img src="images/img4.JPG" alt="photo 4">
+                <img src="images/ima5.jpg" alt="photo 5">
               </div>
             </div>
-            <img src="images/camera.png" alt="camera" class="camera">
+            <img src="images/camera.png" alt="Appareil photo" class="about-camera-img">
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <p class="fs-5 mb-4" style="text-align: justify;">
-            Je suis actuellement en deuxième année du BUT Métiers du Multimédia et de l'internet en parcours <strong>Création Numérique</strong>. J’aime raconter des histoires à travers l’image, le son et le design. Mon univers mêle graphisme, audiovisuel et communication pour créer des projets qui captent l’attention et éveillent la curiosité.
-            En dehors de mes projets, j’adore voyager et capturer mes expériences en photo, une manière pour moi de garder une trace des moments vécus et de les transformer ensuite en inspiration créative.
-          </p>
-
-          <div class="cv-action-container">
-            <a href="images/cv1.pdf" target="_blank" class="btn btn-lg" style="background:var(--bordeaux);color:var(--ivory);">
-              Mon CV !
-            </a>
-            <i class="fa-solid fa-arrow-pointer cv-pointer-icon" title="Cliquez ici pour mon CV !"></i>
+        <!-- DROITE : texte sur papier ligné -->
+        <div class="about-text reveal">
+          <div class="paper-note-wrap">
+            <div class="paper-note">
+              <div class="paper-holes">
+                <div class="paper-hole"></div>
+                <div class="paper-hole"></div>
+                <div class="paper-hole"></div>
+              </div>
+              <p>Je suis actuellement en deuxième année du BUT Métiers du Multimédia et de l'internet en parcours <strong>Création Numérique</strong>.</p>
+              <p>J'aime raconter des histoires à travers l'image, le son et le design. Mon univers mêle graphisme, audiovisuel et communication pour créer des projets qui captent l'attention et éveillent la curiosité.</p>
+              <p>En dehors de mes projets, j'adore voyager et capturer mes expériences en photo une manière pour moi de garder une trace des moments vécus et de les transformer ensuite en inspiration créative.</p>
+            </div>
           </div>
+          <a href="images/cvMMI.pdf" target="_blank" class="cv-btn">
+            <i class="fa-regular fa-file-pdf"></i> Télécharger mon CV
+          </a>
+        </div>
+     
+      </div>
         </div>
       </div>
     </div>
   </section>
-
-  <section id="skills" class="text-center">
+ 
+  <div class="mag-rule"></div>
+ 
+  <!-- ── SKILLS ── -->
+  <section id="skills">
     <div class="container">
-      <h2 class="mb-5">Mes Compétences</h2>
-      <div class="skills-wrapper">
-        <div class="skills-gradient-left"></div>
-
-        <div class="skills-track">
-
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
-            <span class="skill-badge">Avancé</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
-            <span class="skill-badge">Débutant</span>
-          </div>
-
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
-            <span class="skill-badge">Avancé</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
-            <span class="skill-badge">Intermédiaire</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
-            <span class="skill-badge">Débutant</span>
-          </div>
-          <div class="skill-item">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
-            <span class="skill-badge">Débutant</span>
-          </div>
+      <div class="skills-header">
+        <div>
+          <p class="section-label reveal">Outils & logiciels</p>
+          <h2 class="section-title reveal">Mes <em>compétences</em></h2>
         </div>
-        <div class="skills-gradient-right"></div>
+       
+      </div>
+ 
+      <div class="skills-grid">
+ 
+        <!-- Figma -->
+        <div class="skill-card reveal">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma">
+          <div class="skill-card-name">Figma</div>
+          <div class="skill-card-level">Avancé</div>
+        </div>
+ 
+        <!-- Premiere Pro -->
+        <div class="skill-card reveal">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg" alt="Premiere Pro">
+          <div class="skill-card-name">Premiere Pro</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+ 
+        <!-- Photoshop -->
+        <div class="skill-card reveal">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg" alt="Photoshop">
+          <div class="skill-card-name">Photoshop</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+ 
+        <!-- Illustrator -->
+        <div class="skill-card reveal">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg" alt="Illustrator">
+          <div class="skill-card-name">Illustrator</div>
+          <div class="skill-card-level">Avancé</div>
+        </div>
+ 
+        <!-- After Effects -->
+        <div class="skill-card reveal">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg" alt="After Effects">
+          <div class="skill-card-name">After Effects</div>
+          <div class="skill-card-level">Débutant</div>
+        </div>
+ 
+        <!-- InDesign -->
+        <div class="skill-card reveal">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Adobe_InDesign_CC_icon.svg" alt="InDesign">
+          <div class="skill-card-name">InDesign</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+ 
+        <!-- Blender -->
+        <div class="skill-card reveal">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender">
+          <div class="skill-card-name">Blender</div>
+          <div class="skill-card-level">Débutant</div>
+        </div>
+ 
+        <!-- WordPress -->
+        <div class="skill-card reveal">
+          <svg class="skill-icon-svg" viewBox="0 0 122.52 122.523" xmlns="http://www.w3.org/2000/svg" fill="#21759B">
+            <path d="M8.708 61.26c0 20.802 12.089 38.779 29.619 47.298L13.258 39.872a52.354 52.354 0 0 0-4.55 21.388zM96.74 58.608c0-6.495-2.333-10.993-4.334-14.494-2.664-4.329-5.161-7.995-5.161-12.324 0-4.831 3.664-9.328 8.825-9.328.233 0 .454.029.681.042-9.35-8.566-21.807-13.796-35.489-13.796-18.36 0-34.513 9.42-43.91 23.688 1.233.037 2.395.063 3.382.063 5.497 0 14.005-.667 14.005-.667 2.833-.167 3.167 3.994.337 4.329 0 0-2.847.335-6.015.501L48.2 96.308l11.01-33.02-7.83-21.471c-2.83-.166-5.511-.501-5.511-.501-2.832-.166-2.5-4.496.332-4.329 0 0 8.679.667 13.843.667 5.496 0 14.006-.667 14.006-.667 2.835-.167 3.168 3.994.337 4.329 0 0-2.853.335-6.015.501l18.992 56.494 5.242-17.517c2.272-7.269 4.001-12.49 4.001-16.986zM61.751 66.24l-15.77 45.804a52.522 52.522 0 0 0 14.404 2.018 52.566 52.566 0 0 0 16.695-2.713L61.751 66.24zm36.013-23.74c.226 1.674.355 3.471.355 5.405 0 5.33-.995 11.328-3.994 18.824l-16.04 46.376c15.615-9.107 26.136-26.005 26.136-45.366a52.48 52.48 0 0 0-6.457-25.239z"/>
+            <path d="M0 61.26C0 94.842 27.419 122.261 61 122.261c33.583 0 61.002-27.419 61.002-61.001C122.002 27.68 94.583.261 61 .261 27.419.261 0 27.68 0 61.26zm3.66 0C3.66 29.703 29.443 3.921 61 3.921c31.558 0 57.341 25.782 57.341 57.339 0 31.558-25.783 57.34-57.341 57.34C29.443 118.6 3.66 92.818 3.66 61.26z"/>
+          </svg>
+          <div class="skill-card-name">WordPress</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+ 
+        <!-- Canva -->
+        <div class="skill-card reveal">
+          <svg class="skill-icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="#7D2AE8"/>
+            <path d="M64.5 32.2c-5.1-3.6-12.4-2.6-17.1 2-2.4 2.4-3.8 5.5-3.8 8.9 0 1.9.4 3.7 1.3 5.3-1.2-.4-2.5-.6-3.8-.6-6.3 0-11.4 5.1-11.4 11.4S35.3 70.6 41.6 70.6c3.5 0 6.7-1.6 8.8-4.1 1 3.2 3.9 5.5 7.3 5.5 4.3 0 7.8-3.5 7.8-7.8 0-.3 0-.5-.1-.8C69 62 71 59.4 71 56.4c0-2.3-1-4.4-2.7-5.9.5-1.3.8-2.7.8-4.2 0-5.5-2.1-10.5-4.6-14.1z" fill="white"/>
+          </svg>
+          <div class="skill-card-name">Canva</div>
+          <div class="skill-card-level">Avancé</div>
+        </div>
+ 
+        <!-- CapCut -->
+        <div class="skill-card reveal">
+          <svg class="skill-icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="22" fill="#000"/>
+            <path d="M30 30 L30 70 L55 50 Z" fill="white"/>
+            <rect x="60" y="30" width="12" height="40" rx="4" fill="white"/>
+          </svg>
+          <div class="skill-card-name">CapCut</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+ 
+        <!-- Notion -->
+        <div class="skill-card reveal">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion">
+          <div class="skill-card-name">Notion</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+
+        <!-- HTML5 -->
+        <div class="skill-card reveal">
+          <svg class="skill-icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="10" fill="#E34F26"/>
+            <path d="M15 10 L85 10 L78 82 L50 90 L22 82 Z" fill="#EF652A"/>
+            <path d="M50 82 L72 76 L78 18 L50 18 Z" fill="#EF652A"/>
+            <path d="M15 10 L85 10 L78 82 L50 90 L22 82 Z" fill="none"/>
+            <path d="M50 18 L50 82 L72 76 L78 18 Z" fill="white" opacity="0.15"/>
+            <path d="M28 26 L72 26 L70 46 L50 52 L30 46 L31 38 L50 44 L69 38 L70 26" fill="none"/>
+            <polygon points="28,26 30,46 50,52 70,46 72,26" fill="white"/>
+            <polygon points="31,38 50,44 69,38 70,26 28,26 29,34 50,34 69,34 68,44 50,48 32,44" fill="#E34F26"/>
+            <rect x="36" y="58" width="28" height="8" rx="2" fill="white"/>
+            <rect x="38" y="68" width="24" height="8" rx="2" fill="white" opacity="0.7"/>
+          </svg>
+          <div class="skill-card-name">HTML5</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+
+        <!-- CSS -->
+        <div class="skill-card reveal">
+          <svg class="skill-icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="10" fill="#1572B6"/>
+            <path d="M15 10 L85 10 L78 82 L50 90 L22 82 Z" fill="#33A9DC"/>
+            <path d="M50 18 L50 82 L72 76 L78 18 Z" fill="white" opacity="0.15"/>
+            <polygon points="28,26 30,46 50,52 70,46 72,26" fill="white"/>
+            <polygon points="31,38 50,44 69,38 70,26 28,26 29,34 50,34 69,34 68,44 50,48 32,44" fill="#1572B6"/>
+            <rect x="36" y="58" width="28" height="8" rx="2" fill="white"/>
+            <rect x="38" y="68" width="24" height="8" rx="2" fill="white" opacity="0.7"/>
+          </svg>
+          <div class="skill-card-name">CSS</div>
+          <div class="skill-card-level">Intermédiaire</div>
+        </div>
+
+        <!-- PHP -->
+        <div class="skill-card reveal">
+          <svg class="skill-icon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="10" fill="#777BB4"/>
+            <ellipse cx="50" cy="50" rx="46" ry="28" fill="#4F5B93"/>
+            <text x="50" y="58" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="28" fill="white">php</text>
+          </svg>
+          <div class="skill-card-name">PHP</div>
+          <div class="skill-card-level">Débutant</div>
+        </div>
+ 
       </div>
     </div>
   </section>
-
+ 
+  <div class="mag-rule"></div>
+ 
+  <!-- ── PROJECTS ── -->
   <section id="projects">
     <div class="container">
-      <h2 class="text-center mb-5">Mes Projets</h2>
-      
-      <div class="film-strip-wrapper">
-
-        <div class="project-frame">
-          <span class="frame-number">01</span>
-          <a href="https://youtu.be/EZZM97t1kFs" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/seconde-chance.png" alt="Seconde chance">
-              <div class="project-overlay">Voir le court-métrage</div>
-              <div class="p-3">
-                <h5>Seconde Chance</h5>
-                <p>Court-métrage réalisé dans le cadre des Deauville Green Awards 2025, sur le thème “Filme ton action”, ayant remporté la première place dans la catégorie Jeunes.</p>
-              </div>
-            </div>
-          </a>
+      <div class="projects-intro">
+        <div>
+          <p class="section-label reveal">Sélection de travaux</p>
+          <h2 class="section-title reveal">Mes <em>projets</em></h2>
         </div>
 
-        <div class="project-frame">
-          <span class="frame-number">02</span>
-          <a href="Projets/illustration.pdf" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/illustration.png" alt="Illustration écologique">
-              <div class="project-overlay">Voir l'illustration </div>
-              <div class="p-3">
-                <h5>Illustration</h5>
-                <p>Illustration réalisée sur Adobe Illustrator dans un temps contraint, dénonçant l’absurdité des réactions face au réchauffement climatique.</p>
-              </div>
-            </div>
-          </a>
-        </div>
+      </div>
+ 
+      <div class="projects-list">
+ 
+        <a href="https://youtu.be/EZZM97t1kFs" target="_blank" class="project-row reveal">
+          <span class="project-num">01</span>
+          <span class="project-name">Seconde Chance</span>
+          <span class="project-type">Court-métrage</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Court-métrage réalisé dans le cadre des Deauville Green Awards 2025, sur le thème "Filme ton action", ayant remporté la première place dans la catégorie Jeunes.</span>
+        </a>
 
-        <div class="project-frame">
-          <span class="frame-number">03</span>
-          <a href="https://youtu.be/IkQDu1N6STk" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/ca.png" alt="Interview Maison Sport Santé">
-              <div class="project-overlay">Voir la vidéo</div>
-              <div class="p-3">
-                <h5>Crédit Agricole : le sociétariat</h5>
-                <p>Vidéo pour le Crédit Agricole expliquant le sociétariat aux jeunes, en utilisant les codes des créateurs YouTube : rythme dynamique, ton direct et mise en scène moderne.</p>
-              </div>
-            </div>
-          </a>
-        </div>
+         <a href="https://youtu.be/IkQDu1N6STk" target="_blank" class="project-row reveal">
+          <span class="project-num">02</span>
+          <span class="project-name">Crédit Agricole</span>
+          <span class="project-type">Vidéo / Communication</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Vidéo pour le Crédit Agricole expliquant le sociétariat aux jeunes, en utilisant les codes des créateurs YouTube : rythme dynamique, ton direct et mise en scène moderne.</span>
+        </a>
 
+         <a href="elmt graphique .pdf" target="_blank" class="project-row reveal">
+          <span class="project-num">03</span>
+          <span class="project-name">Univers graphique</span>
+          <span class="project-type">Identité visuelle</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Création d'un univers graphique texturé pour une application RSE sur Photoshop. Travail sur le relief et la profondeur pour évoquer la nature de manière moderne et sensorielle.</span>
+        </a>
+
+         <a href="https://www.figma.com/proto/YqU2vqtgpN1azLUa3epEyz/Untitled?node-id=17-876&viewport=421%2C139%2C0.09&t=WnGgSOH6SC5o86qe-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=17%3A876&show-proto-sidebar=1&page-id=0%3A1" target="_blank" class="project-row reveal">
+          <span class="project-num">04</span>
+          <span class="project-name">Prototypage interactif</span>
+          <span class="project-type">UI/UX design</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Conception d’une maquette sur Figma pour un site de gestion des bénévoles du Seine Marathon.
+Le projet comprend une interface mobile pour les bénévoles et une version desktop pour les organisateurs, mettant en avant un travail en UI/UX design.
+        </a>
+
+        <a href="https://youtu.be/c4mPYPu8Jfk" target="_blank" class="project-row reveal">
+          <span class="project-num">05</span>
+          <span class="project-name">Projet audiovisuel</span>
+          <span class="project-type">Motion design</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Vidé réalisée en groupe sur After Effects.
+Présentation de la poursuite d’études après un BUT MMI à travers le métier de directeur artistique, avec une voix off écrite et enregistrée en studio.
+</span>
+        </a>
+ 
+        <a href="Projets/illustration.pdf" target="_blank" class="project-row reveal">
+          <span class="project-num">06</span>
+          <span class="project-name">Illustration</span>
+          <span class="project-type">Design graphique</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Illustration réalisée sur Adobe Illustrator dans un temps contraint, dénonçant l'absurdité des réactions face au réchauffement climatique.</span>
+        </a>
+ 
        
-
-        <div class="project-frame">
-          <span class="frame-number">04</span>
-          <a href="Projets/CasqueF1.pdf" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/casque.png" alt="Casque F1 en 3D">
-              <div class="project-overlay">Voir le rendu</div>
-              <div class="p-3">
-                <h5>Casque F1 en 3D</h5>
-                <p>Première expérience de création 3D sur Blender, axée sur la découverte et l’appropriation des techniques de modélisation et de rendu.</p>
-              </div>
-            </div>
-          </a>
-        </div>
+ 
+        <a href="Projets/CasqueF1.pdf" target="_blank" class="project-row reveal">
+          <span class="project-num">07</span>
+          <span class="project-name">Casque F1 en 3D</span>
+          <span class="project-type">Modélisation 3D</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Première expérience de création 3D sur Blender, axée sur la découverte et l'appropriation des techniques de modélisation et de rendu.</span>
+        </a>
+ 
+        <a href="https://youtu.be/bh0O1uTY05I" target="_blank" class="project-row reveal">
+          <span class="project-num">08</span>
+          <span class="project-name">Film Noir</span>
+          <span class="project-type">Court-métrage</span>
+          <span class="project-cta">Voir →</span>
+          <span class="project-desc">Projet de court-métrage de type film noir — captation vidéo, prise de son, gestion du son et montage final.</span>
+        </a>
+ 
+       
         
-
-        <div class="project-frame">
-          <span class="frame-number">05</span>
-          <a href="https://youtu.be/bh0O1uTY05I" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/filmnoir.png" alt="Film Noir">
-              <div class="project-overlay">Voir le court-métrage</div>
-              <div class="p-3">
-                <h5>Film Noir</h5>
-                <p>Projet de court-métrage de type film noir, pour lequel j’ai assuré la captation vidéo, la prise et la gestion du son, ainsi que le montage final.</p>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <div class="project-frame">
-          <span class="frame-number">06</span>
-          <a href="Projets/OverTime.pdf" class="text-decoration-none text-reset">
-            <div class="project-card">
-              <img src="images/Overtime.png" alt="Over Time">
-              <div class="project-overlay">Voir le projet</div>
-              <div class="p-3">
-                <h5>Over Time</h5>
-                <p>Projet collectif réalisé en première année d’études pour imaginer un événement immersif valorisant le patrimoine industriel d’Elbeuf.</p>
-              </div>
-            </div>
-          </a>
-        </div>
-        
-      </div>
-      </div>
-  </section>
-
-<section id="contact">
-    <div class="container">
-      <h2 class="mb-3">Contact</h2>
-      <p>N’hésitez pas à me contacter : </p>
-
-      <div class="contact-icons">
-        <a href="mailto:loane.scellier@gmail.com" title="Envoyer un email"><i class="fa-solid fa-envelope"></i></a>
-        <a href="https://www.linkedin.com/in/loane-scellier/" target="_blank" title="Voir mon profil LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+ 
       </div>
     </div>
   </section>
-
+ 
+  <div class="mag-rule"></div>
+ 
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label reveal">Travaillons ensemble</p>
+      <h2 class="section-title reveal">Prête à <em>collaborer</em></h2>
+ 
+      <div class="contact-layout">
+        <p class="contact-big-text reveal">
+          Une idée,<br>un projet,<br>une envie de créer ?
+        </p>
+        <div class="contact-info reveal">
+          <a href="mailto:loane.scellier@gmail.com" class="contact-line">
+            <i class="fa-solid fa-envelope"></i>
+            loane.scellier@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/loane-scellier/" target="_blank" class="contact-line">
+            <i class="fa-brands fa-linkedin-in"></i>
+            linkedin.com/in/loane-scellier
+          </a>
+          <a href="images/cvMMI.pdf" target="_blank" class="contact-line">
+            <i class="fa-regular fa-file-pdf"></i>
+            Télécharger mon CV
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
   <footer>
-    <p>&copy; <span id="year"></span> Scellier Loane — Tous droits réservés</p>
+    <p>&copy; <span id="year"></span> &nbsp;·&nbsp; Loane Scellier &nbsp;·&nbsp; Tous droits réservés</p>
   </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+ 
   <script>
-
-
     document.getElementById('year').textContent = new Date().getFullYear();
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const filmStrip = document.querySelector('.film-strip-wrapper');
-
-        // === 1. Calcul et ajustement de la longueur des perforations (pellicule) ===
-        if (filmStrip) {
-            // Un petit délai pour s'assurer que le contenu a bien été rendu
-            // Ceci est crucial pour que scrollWidth renvoie la bonne taille.
-            setTimeout(() => {
-                // Calcule la largeur totale du contenu défilant (scrollWidth)
-                const fullContentWidth = filmStrip.scrollWidth + 'px';
-                
-                // Applique cette largeur à la variable CSS --full-scroll-width
-                filmStrip.style.setProperty('--full-scroll-width', fullContentWidth);
-            }, 50); 
+ 
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .menu-toggle, .skill-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+ 
+    // Menu toggle
+    function toggleMenu() {
+      const toggle = document.getElementById('menuToggle');
+      const overlay = document.getElementById('navOverlay');
+      toggle.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+ 
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'),
+            (entry.target.dataset.delay || 0) * 100);
+          observer.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.1 });
+ 
+    reveals.forEach((el, i) => {
+      el.dataset.delay = i % 5;
+      observer.observe(el);
     });
   </script>
 </body>
+</html></body>
 </html>
