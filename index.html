@@ -63,6 +63,8 @@
       transition: transform 0.6s cubic-bezier(.23,1,.32,1), color 0.3s;
       display: block;
       user-select: none;
+      font-variant-emoji: text;
+      -webkit-font-variant-emoji: text;
     }
     .menu-toggle:hover .asterisk { color: var(--rose2); }
     .menu-toggle.open .asterisk { transform: rotate(30deg); color: var(--rose2); }
@@ -279,7 +281,7 @@
       color: var(--marron); display: flex; align-items: center; gap: 1rem;
       margin-bottom: 3rem;
     }
-    .section-label::before { content: '✳'; font-size: 0.9rem; }
+    .section-label::before { content: '✳\FE0E'; font-size: 0.9rem; font-variant-emoji: text; }
     .section-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.5rem, 5vw, 4.5rem);
@@ -520,58 +522,6 @@
  
     /* ── RESPONSIVE ── */
 
-    /* MOBILE HERO */
-    @media (max-width: 768px) {
-      #hero {
-        padding: 2rem;
-        align-items: flex-start;
-      }
-      .hero-title {
-        font-size: clamp(4rem, 18vw, 6rem);
-        margin-top: 5rem;
-      }
-      .hero-image-wrap {
-        position: relative;
-        right: auto;
-        top: auto;
-        transform: rotate(4deg);
-        width: 220px;
-        margin-top: 3rem;
-      }
-      .hero-floating-note { display: none; }
-      .hero-side-text { display: none; }
-
-      /* cursor off on touch */
-      body { cursor: auto; }
-      .cursor { display: none; }
-
-      /* running head simplifié */
-      .running-head span:nth-child(2) { display: none; }
-
-      /* about */
-      .about-grid { grid-template-columns: 1fr; }
-      .about-camera { margin-bottom: 1.5rem; padding: 0.5rem; }
-      .about-camera-wrapper { width: min(260px, 80%); transform: rotate(-2deg); }
-
-      /* skills */
-      .skills-header { flex-direction: column; align-items: flex-start; margin-bottom: 2.5rem; }
-      .skills-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 1rem; }
-      .skill-card { padding: 1.2rem 0.75rem; }
-
-      /* projects */
-      .projects-intro { flex-direction: column; align-items: flex-start; }
-      .project-row { grid-template-columns: 40px 1fr; padding: 1rem; }
-      .project-type, .project-cta { display: none; }
-      .project-desc { grid-column: 2 / -1; }
-
-      /* contact */
-      .contact-layout { grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
-      .contact-big-text { font-size: clamp(2.2rem, 8vw, 3.5rem); }
-
-      /* menu toggle */
-      .menu-toggle { bottom: 1.5rem; right: 1.5rem; }
-    }
-
     /* Tablet : 900px */
     @media (max-width: 900px) {
       .about-grid { gap: 1.5rem; }
@@ -580,13 +530,119 @@
       .contact-layout { gap: 3rem; }
     }
 
-    /* Petit mobile : 480px */
+    /* MOBILE : ≤ 768px */
+    @media (max-width: 768px) {
+      /* cursor off on touch */
+      body { cursor: auto; }
+      .cursor { display: none; }
+
+      /* running head simplifié */
+      .running-head span:nth-child(2) { display: none; }
+
+      /* ── HERO ── */
+      #hero {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 5rem 1.5rem 3rem;
+        padding-left: 1.5rem;
+        min-height: auto;
+        gap: 2rem;
+      }
+      .hero-main {
+        max-width: 100%;
+        width: 100%;
+      }
+      .hero-title {
+        font-size: clamp(3.5rem, 16vw, 6rem);
+        margin-top: 1rem;
+      }
+      .hero-description {
+        font-size: 0.9rem;
+        max-width: 100%;
+      }
+      /* Photo : sort du flux absolu, reprend sa place dans la colonne */
+      .hero-image-wrap {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: rotate(4deg);
+        width: min(280px, 72vw);
+        margin: 0 auto;
+      }
+      .hero-image-wrap:hover {
+        transform: rotate(-2deg) scale(1.02);
+      }
+      .hero-floating-note { display: none; }
+      .hero-side-text { display: none; }
+      .hero-bg-word { font-size: 40vw; }
+
+      /* ── ABOUT ── */
+      .about-grid { grid-template-columns: 1fr; }
+      .about-camera { margin-bottom: 1.5rem; padding: 0.5rem; }
+      .about-camera-wrapper { width: min(280px, 80%); transform: rotate(-2deg); }
+
+      /* ── SKILLS ── */
+      .skills-header { flex-direction: column; align-items: flex-start; margin-bottom: 2.5rem; }
+      .skills-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 1rem; }
+      .skill-card { padding: 1.2rem 0.75rem; }
+
+      /* ── PROJECTS ── */
+      .projects-intro { flex-direction: column; align-items: flex-start; }
+      .project-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+        padding: 1rem 1.2rem;
+      }
+      .project-num {
+        font-size: 0.6rem;
+        opacity: 0.6;
+      }
+      .project-name {
+        font-size: 1.5rem;
+        line-height: 1.2;
+      }
+      .project-type {
+        display: block;
+        font-size: 0.6rem;
+        opacity: 0.6;
+      }
+      .project-cta {
+        display: block;
+        opacity: 1;
+        font-size: 0.65rem;
+      }
+      /* Description toujours visible sur mobile (pas de hover) */
+      .project-desc {
+        grid-column: unset;
+        display: block;
+        opacity: 0.7;
+        max-height: none;
+        overflow: visible;
+        padding-top: 0.4rem;
+        font-size: 0.82rem;
+        line-height: 1.6;
+      }
+
+      /* ── CONTACT ── */
+      .contact-layout { grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+      .contact-big-text { font-size: clamp(2.2rem, 8vw, 3.5rem); }
+
+      /* ── MENU TOGGLE ── */
+      .menu-toggle { bottom: 1.5rem; right: 1.5rem; }
+    }
+
+    /* Petit mobile : ≤ 480px */
     @media (max-width: 480px) {
       .container { padding: 0 1.2rem; }
       .section-title { font-size: clamp(2rem, 9vw, 3rem); }
       .skills-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-      .project-name { font-size: 1.3rem; }
+      .project-name { font-size: 1.25rem; }
       .contact-line { font-size: 0.78rem; padding: 1.2rem 0; }
+      #hero { padding: 4.5rem 1.2rem 2.5rem; }
+      .hero-image-wrap { width: min(240px, 80vw); }
     }
 
   </style>
@@ -597,7 +653,7 @@
  
   <!-- Asterisk Menu Toggle -->
   <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-    <span class="asterisk">✳</span>
+    <span class="asterisk">✳&#xFE0E;</span>
   </div>
  
   <!-- Nav Overlay -->
@@ -637,7 +693,7 @@
       </div>
     </div>
     <div class="hero-image-wrap">
-      <img src="images/PhotoIndi.JPEG" alt="" class="hero-image">
+      <img src="PhotoIndi.JPEG" alt="" class="hero-image">
     </div>
   </section>
  
@@ -659,12 +715,12 @@
                 <img src="images/img2.jpg" alt="photo 2">
                 <img src="images/img3.jpg" alt="photo 3">
                 <img src="images/img4.JPG" alt="photo 4">
-                <img src="images/ima5.JPG" alt="photo 5">
+                <img src="images/ima5.jpg" alt="photo 5">
                 <img src="images/img1.jpg" alt="photo 1">
                 <img src="images/img2.jpg" alt="photo 2">
                 <img src="images/img3.jpg" alt="photo 3">
                 <img src="images/img4.JPG" alt="photo 4">
-                <img src="images/ima5.JPG" alt="photo 5">
+                <img src="images/ima5.jpg" alt="photo 5">
               </div>
             </div>
             <img src="images/camera.png" alt="Appareil photo" class="about-camera-img">
@@ -877,7 +933,7 @@
           <span class="project-desc">Vidéo pour le Crédit Agricole expliquant le sociétariat aux jeunes, en utilisant les codes des créateurs YouTube : rythme dynamique, ton direct et mise en scène moderne.</span>
         </a>
 
-         <a href="Projets/graphique.pdf" target="_blank" class="project-row reveal">
+         <a href="elmt graphique .pdf" target="_blank" class="project-row reveal">
           <span class="project-num">03</span>
           <span class="project-name">Univers graphique</span>
           <span class="project-type">Identité visuelle</span>
@@ -890,8 +946,7 @@
           <span class="project-name">Prototypage interactif</span>
           <span class="project-type">UI/UX design</span>
           <span class="project-cta">Voir →</span>
-          <span class="project-desc">Conception d’une maquette sur Figma pour un site de gestion des bénévoles du Seine Marathon.
-Le projet comprend une interface mobile pour les bénévoles et une version desktop pour les organisateurs, mettant en avant un travail en UI/UX design.
+          <span class="project-desc">Conception d’une maquette sur Figma pour un site de gestion des bénévoles du Seine Marathon. Le projet comprend une interface mobile pour les bénévoles et une version desktop pour les organisateurs, mettant en avant un travail en UI/UX design.</span>
         </a>
 
         <a href="https://youtu.be/c4mPYPu8Jfk" target="_blank" class="project-row reveal">
@@ -1011,5 +1066,4 @@ Présentation de la poursuite d’études après un BUT MMI à travers le métie
     });
   </script>
 </body>
-</html></body>
 </html>
